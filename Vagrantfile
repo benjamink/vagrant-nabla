@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
       export APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=True
       export DEBIAN_FRONTEND=noninteractive
       apt-get update
-      apt-get -y install apt-transport-https ca-certificates curl software-properties-common
+      apt-get -y install apt-transport-https ca-certificates curl software-properties-common build-essential
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
       apt-key fingerprint 0EBFCD88
       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -38,5 +38,15 @@ Vagrant.configure("2") do |config|
       echo "export GOPATH=/home/vagrant/go" >> /home/vagrant/.profile
     fi
   SCRIPT
+
+  config.vm.provision "shell" do |s|
+    s.privileged = false
+    s.inline     = <<-SCRIPT
+      echo "SCRIPT: Setup Nabla"
+      go get -v github.com/nabla-containers/runnc
+      cd ${GOPATH}/src/github.com/nabla-containers/runnc
+      make container-build
+    SCRIPT
+  end
 
 end
