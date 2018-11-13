@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
       add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
       apt-get update
       apt-get -y install docker-ce
+      usermod -a -G docker vagrant
     fi
   SCRIPT
 
